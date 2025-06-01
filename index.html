@@ -460,12 +460,26 @@
             heroVideo.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
         });
 
+        // navigation menu toggle for mobile
+        // Toggle navigation menu on hamburger click
         const hamburger = document.getElementById('hamburger');
         const navUL = document.getElementById('nav_ul');
+        const navLinks = document.querySelectorAll('#nav_ul a');
 
         hamburger.addEventListener('click', () => {
             navUL.classList.toggle('active');
         });
+
+        // Close nav menu after clicking a link (on mobile)
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navUL.classList.remove('active');
+                }
+            });
+        });
+
+
 
         //contact.............
 
