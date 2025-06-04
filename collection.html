@@ -616,7 +616,7 @@
             }
         }
 
-         h1 {
+        h1 {
             padding-top: 150px;
             font-size: 2.5rem;
             text-align: center;
@@ -634,8 +634,8 @@
         </div>
         <ul id="nav_ul">
             <li><a href="index.html">Home</a></li>
-            <li><a href="index.html">About</a></li>
-            <li><a href="index.html">Contact</a></li>
+            <li><a href="index.html#about_us">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
         </ul>
         <i class="fa-solid fa-cart-shopping" id="cart-icon">
             <span id="cart-count" class="cart-count">0</span>
@@ -645,7 +645,6 @@
     <h1> Featured Pieces</h1>
 
     <div class="product-grid">
-
         <!-- 1 -->
         <div class="product-card">
             <img src="https://everbritejewellery.com/wp-content/uploads/2023/01/MEB0529-2.png"
@@ -820,10 +819,10 @@
                 <h3>Explore</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html">Our Story</a></li>
-                    <li><a href="index.html">Collections</a></li>
-                    <li><a href="index.html">Gallery</a></li>
-                    <li><a href="index.html">Book Appointment</a></li>
+                    <li><a href="index.html#about_us">Our Story</a></li>
+                    <li><a href="index.html#collection">Collections</a></li>
+                    <li><a href="index.html#gallery">Gallery</a></li>
+                    <li><a href="index.html#contact">Book Appointment</a></li>
                 </ul>
             </div>
 
@@ -888,86 +887,91 @@
     </div>
 
     <script>
-        let cart = [];
-const cartIcon = document.getElementById('cart-icon');
-const cartContainer = document.getElementById('cart-container');
-const overlay = document.getElementById('overlay');
-const closeCartBtn = document.getElementById('close-cart');
-const cartItemsContainer = document.getElementById('cart-items');
-const emptyCartMessage = document.getElementById('empty-cart');
-const cartFooter = document.getElementById('cart-footer');
-const cartCountElement = document.getElementById('cart-count');
-const checkoutBtn = document.getElementById('checkout-btn');
+        let cart = JSON.parse(localStorage.getItem('diamondCart')) || [];
 
-// Toggle cart
-cartIcon.addEventListener('click', () => {
-    cartContainer.classList.add('open');
-    overlay.classList.add('active');
-});
+        const cartIcon = document.getElementById('cart-icon');
+        const cartContainer = document.getElementById('cart-container');
+        const overlay = document.getElementById('overlay');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart');
+        const cartFooter = document.getElementById('cart-footer');
+        const cartCountElement = document.getElementById('cart-count');
+        const checkoutBtn = document.getElementById('checkout-btn');
 
-closeCartBtn.addEventListener('click', () => {
-    cartContainer.classList.remove('open');
-    overlay.classList.remove('active');
-});
+        // Initialize cart on page load
+        updateCart();
 
-overlay.addEventListener('click', () => {
-    cartContainer.classList.remove('open');
-    overlay.classList.remove('active');
-});
+        // Toggle cart
+        cartIcon.addEventListener('click', () => {
+            cartContainer.classList.add('open');
+            overlay.classList.add('active');
+        });
 
-function addToCart(button) {
-    const product = {
-        name: button.getAttribute('data-name'),
-        price: parseFloat(button.getAttribute('data-price')),
-        img: button.getAttribute('data-img'),
-        quantity: 1
-    };
+        closeCartBtn.addEventListener('click', () => {
+            cartContainer.classList.remove('open');
+            overlay.classList.remove('active');
+        });
 
-    // Check if product already in cart
-    const existingItem = cart.find(item => item.name === product.name);
-    
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push(product);
-    }
+        overlay.addEventListener('click', () => {
+            cartContainer.classList.remove('open');
+            overlay.classList.remove('active');
+        });
 
-    updateCart();
-    updateProductCount(button);
-    animateCartIcon();
-}
+        function addToCart(button) {
+            const product = {
+                name: button.getAttribute('data-name'),
+                price: parseFloat(button.getAttribute('data-price')),
+                img: button.getAttribute('data-img'),
+                quantity: 1
+            };
 
-function animateCartIcon() {
-    cartIcon.style.transform = 'scale(1.2)';
-    setTimeout(() => {
-        cartIcon.style.transform = 'scale(1)';
-    }, 300);
-}
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.name === product.name);
 
-function updateCart() {
-    // Update cart count
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountElement.textContent = totalItems;
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(product);
+            }
 
-    // Update cart items
-    cartItemsContainer.innerHTML = '';
-    
-    if (cart.length === 0) {
-        emptyCartMessage.style.display = 'block';
-        cartFooter.style.display = 'none';
-    } else {
-        emptyCartMessage.style.display = 'none';
-        cartFooter.style.display = 'block';
+            saveCartToLocalStorage();
+            updateCart();
+            updateProductCount(button);
+            animateCartIcon();
+        }
 
-        let total = 0;
-        
-        cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
+        function animateCartIcon() {
+            cartIcon.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                cartIcon.style.transform = 'scale(1)';
+            }, 300);
+        }
 
-            const cartItem = document.createElement('div');
-            cartItem.className = 'cart-item';
-            cartItem.innerHTML = `
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCountElement.textContent = totalItems;
+
+            // Update cart items
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartFooter.style.display = 'none';
+            } else {
+                emptyCartMessage.style.display = 'none';
+                cartFooter.style.display = 'block';
+
+                let total = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
                 <img src="${item.img}" alt="${item.name}" class="cart-item-img">
                 <div class="cart-item-details">
                     <div class="cart-item-name">${item.name}</div>
@@ -982,127 +986,142 @@ function updateCart() {
                     </div>
                 </div>
             `;
-            cartItemsContainer.appendChild(cartItem);
-        });
+                    cartItemsContainer.appendChild(cartItem);
+                });
 
-        document.getElementById('cart-total').textContent = total.toFixed(2);
-    }
-}
-
-function changeQuantity(name, change) {
-    const item = cart.find(item => item.name === name);
-    if (item) {
-        item.quantity += change;
-        
-        if (item.quantity <= 0) {
-            cart = cart.filter(item => item.name !== name);
+                document.getElementById('cart-total').textContent = total.toFixed(2);
+            }
         }
-        
-        updateCart();
-        updateAllProductCounts();
-    }
-}
 
-function removeItem(name) {
-    cart = cart.filter(item => item.name !== name);
-    updateCart();
-    updateAllProductCounts();
-}
+        function changeQuantity(name, change) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity += change;
 
-function updateProductCount(button) {
-    const name = button.getAttribute('data-name');
-    const item = cart.find(item => item.name === name);
-    const countDisplay = button.nextElementSibling;
-    
-    if (item) {
-        countDisplay.setAttribute('data-count', item.quantity);
-        countDisplay.textContent = `Added: ${item.quantity}`;
-    }
-}
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.name !== name);
+                }
 
-function updateAllProductCounts() {
-    document.querySelectorAll('.cta-button').forEach(button => {
-        updateProductCount(button);
-    });
-}
+                saveCartToLocalStorage();
+                updateCart();
+                updateAllProductCounts();
+            }
+        }
 
-// Create checkout modal
-function createCheckoutModal() {
-    const modal = document.createElement('div');
-    modal.className = 'checkout-modal';
-    modal.innerHTML = `
-        <div class="checkout-modal-content">
-            <span class="close-modal">&times;</span>
-            <h3>Complete Your Purchase</h3>
-            <form id="checkout-form">
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="Enter your WhatsApp number">
+        function removeItem(name) {
+            cart = cart.filter(item => item.name !== name);
+            saveCartToLocalStorage();
+            updateCart();
+            updateAllProductCounts();
+        }
+
+        function updateProductCount(button) {
+            const name = button.getAttribute('data-name');
+            const item = cart.find(item => item.name === name);
+            const countDisplay = button.nextElementSibling;
+
+            if (item) {
+                countDisplay.setAttribute('data-count', item.quantity);
+                countDisplay.textContent = `Added: ${item.quantity}`;
+            }
+        }
+
+        function updateAllProductCounts() {
+            document.querySelectorAll('.cta-button').forEach(button => {
+                updateProductCount(button);
+            });
+        }
+
+        function saveCartToLocalStorage() {
+            localStorage.setItem('diamondCart', JSON.stringify(cart));
+        }
+
+        // Create confirmation modal
+        function createConfirmationModal() {
+            const modal = document.createElement('div');
+            modal.className = 'confirmation-modal';
+            modal.innerHTML = `
+        <div class="confirmation-modal-content">
+            <h3>Confirm Your Order</h3>
+            <div class="order-summary">
+                ${cart.map(item => `
+                    <div class="order-item">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('')}
+                <div class="order-total">
+                    <span>Total:</span>
+                    <span>$${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</span>
                 </div>
-                <button type="submit" class="submit-order-btn">Submit Order</button>
-            </form>
+            </div>
+            <div class="modal-buttons">
+                <button class="cancel-order">Cancel</button>
+                <button class="confirm-order">Confirm & Buy Now</button>
+            </div>
         </div>
     `;
-    document.body.appendChild(modal);
+            document.body.appendChild(modal);
 
-    // Close modal
-    modal.querySelector('.close-modal').addEventListener('click', () => {
-        modal.remove();
-        overlay.classList.remove('active');
-    });
+            // Close modal
+            modal.querySelector('.cancel-order').addEventListener('click', () => {
+                modal.remove();
+                overlay.classList.remove('active');
+            });
 
-    // Form submission
-    document.getElementById('checkout-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const phone = document.getElementById('phone').value;
-        sendOrder(phone);
-        modal.remove();
-    });
+            // Confirm order
+            modal.querySelector('.confirm-order').addEventListener('click', () => {
+                sendOrderToWhatsApp();
+                modal.remove();
+                overlay.classList.remove('active');
+            });
 
-    return modal;
-}
+            return modal;
+        }
 
-// Send order via WhatsApp
-function sendOrder(phone) {
-    if (cart.length === 0) return;
+        // Send order to fixed WhatsApp number
+        function sendOrderToWhatsApp() {
+            if (cart.length === 0) return;
 
-    let message = "Hello Diamond Jewellery,\n\n";
-    message += "I would like to purchase the following items:\n\n";
-    
-    cart.forEach(item => {
-        message += `✔ ${item.name} - $${item.price.toFixed(2)} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
-    });
-    
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    message += `\nTotal: $${total.toFixed(2)}\n\n`;
-    message += "Please confirm availability and payment details. Thank you!";
-    
-    // Encode message for WhatsApp
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
-    
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
-    
-    // Close cart
-    cartContainer.classList.remove('open');
-    overlay.classList.remove('active');
-}
+            let message = "Hello Diamond Jewellery,\n\n";
+            message += "I would like to purchase the following items:\n\n";
 
-// Updated checkout button click handler
-checkoutBtn.addEventListener('click', () => {
-    if (cart.length === 0) return;
+            cart.forEach(item => {
+                message += `✔ ${item.name} - $${item.price.toFixed(2)} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
+            });
 
-    // Create and show checkout modal
-    const modal = createCheckoutModal();
-    overlay.classList.add('active');
-    modal.style.display = 'block';
-});
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            message += `\nTotal: $${total.toFixed(2)}\n\n`;
+            message += "Please confirm availability and payment details. Thank you!";
 
-// Add modal styles
-const modalStyles = document.createElement('style');
-modalStyles.textContent = `
-    .checkout-modal {
+            // Encode message for WhatsApp
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/919043531165?text=${encodedMessage}`;
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Clear cart after purchase
+            cart = [];
+            saveCartToLocalStorage();
+            updateCart();
+            updateAllProductCounts();
+        }
+
+        // Updated checkout button click handler
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+
+            // Create and show confirmation modal
+            const modal = createConfirmationModal();
+            overlay.classList.add('active');
+            modal.style.display = 'block';
+        });
+
+        // Add modal styles
+        const modalStyles = document.createElement('style');
+        modalStyles.textContent = `
+    .confirmation-modal {
         display: none;
         position: fixed;
         top: 0;
@@ -1116,70 +1135,79 @@ modalStyles.textContent = `
         align-items: center;
     }
     
-    .checkout-modal-content {
+    .confirmation-modal-content {
         background-color: #121212;
         padding: 30px;
         border-radius: 8px;
         width: 90%;
         max-width: 400px;
         border: 1px solid rgba(255, 215, 0, 0.3);
-        position: relative;
     }
     
-    .close-modal {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        color: gold;
-        font-size: 24px;
-        cursor: pointer;
-    }
-    
-    .checkout-modal h3 {
+    .confirmation-modal h3 {
         color: gold;
         margin-bottom: 20px;
         text-align: center;
         font-size: 1.3rem;
     }
     
-    .form-group {
-        margin-bottom: 20px;
+    .order-summary {
+        margin-bottom: 25px;
     }
     
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
         color: #fff;
     }
     
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        border-radius: 4px;
-        color: #fff;
-        font-size: 1rem;
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        font-weight: bold;
+        color: gold;
     }
     
-    .submit-order-btn {
-        background: linear-gradient(to right, gold, #d4af37);
-        color: #0a0a0a;
-        border: none;
+    .modal-buttons {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .cancel-order, .confirm-order {
+        flex: 1;
         padding: 12px;
-        width: 100%;
         border-radius: 4px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
     }
     
-    .submit-order-btn:hover {
+    .cancel-order {
+        background: transparent;
+        border: 1px solid #ff6b6b;
+        color: #ff6b6b;
+    }
+    
+    .cancel-order:hover {
+        background: rgba(255, 107, 107, 0.1);
+    }
+    
+    .confirm-order {
+        background: linear-gradient(to right, gold, #d4af37);
+        color: #0a0a0a;
+        border: none;
+    }
+    
+    .confirm-order:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
     }
 `;
-document.head.appendChild(modalStyles);
+        document.head.appendChild(modalStyles);
 
     </script>
 </body>
