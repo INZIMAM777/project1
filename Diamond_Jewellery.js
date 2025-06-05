@@ -38,7 +38,6 @@
 
 
         //contact.............
-
         document.querySelectorAll('.input-group input, .input-group textarea, .input-group select').forEach(element => {
             element.addEventListener('focus', function () {
                 this.parentNode.querySelector('label').classList.add('active');
@@ -239,4 +238,10 @@ let cart = [];
             // updateCart();
             // updateAllProductCounts();
         });
+
+
+
+
+
+        
         

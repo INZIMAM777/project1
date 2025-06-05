@@ -26,92 +26,177 @@
         }
 
         /* Navigation Bar */
-        .nav_bar {
-            position: fixed;
-            width: 100%;
-            height: 100px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            z-index: 100;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-        }
+     .nav_bar {
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
 
-        .nav_bar i {
-            color: gold;
-            font-size: 2rem;
-            cursor: pointer;
-        }
+/* Logo styling */
+#nav_logo {
+    flex: 1;
+}
 
-        #nav_logo img {
-            width: 120px;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
+#nav_logo img {
+    width: 100px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
 
-        #nav_logo img:hover {
-            transform: scale(1.05);
-        }
+#nav_logo img:hover {
+    transform: scale(1.05);
+}
 
-        #nav_ul {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-        }
+/* Navigation links - hidden on mobile */
+#nav_ul {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.98);
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
 
-        #nav_ul li a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: 500;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            position: relative;
-            padding: 5px 0;
-            transition: color 0.3s ease;
-        }
+#nav_ul.active {
+    display: flex;
+}
 
-        #nav_ul li a:hover {
-            color: gold;
-        }
+#nav_ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
 
-        #nav_ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: gold;
-            transition: width 0.3s ease;
-        }
+/* Right side elements container */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 
-        #nav_ul li a:hover::after {
-            width: 100%;
-        }
+/* Cart icon styling */
+#cart-icon {
+    position: relative;
+    font-size: 1.5rem;
+    color: gold;
+    cursor: pointer;
+    transition: transform 0.3s;
+    order: 2; /* Ensure cart stays on right */
+}
 
-        .fa-cart-shopping {
-            font-size: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s;
-            color: gold;
-        }
+#cart-icon:hover {
+    transform: scale(1.1);
+}
 
-        .cart-count {
-            background: #d4af37;
-            color: #222;
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 50%;
-            position: absolute;
-            top: -10px;
-            right: -12px;
-            font-weight: bold;
-        }
+.cart-count {
+    background: #d4af37;
+    color: #222;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    font-weight: bold;
+}
 
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    order: 1; /* Position before cart icon */
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: gold;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+    .nav_bar {
+        height: 100px;
+    }
+    
+    #nav_logo img {
+        width: 120px;
+    }
+    
+    #nav_ul {
+        display: flex;
+        position: static;
+        flex-direction: row;
+        background: transparent;
+        padding: 0;
+        width: auto;
+        box-shadow: none;
+        border-bottom: none;
+        flex: 1;
+        justify-content: center;
+        gap: 40px;
+    }
+    
+    .mobile-menu-toggle {
+        display: none;
+    }
+    
+    #cart-icon {
+        font-size: 2rem;
+    }
+    
+    .cart-count {
+        top: -10px;
+        right: -12px;
+    }
+    
+    .nav-right {
+        flex: 1;
+        justify-content: flex-end;
+    }
+}
         /* Product Grid */
         .product-grid {
             display: grid;
@@ -1028,9 +1113,16 @@
             <li><a href="index.html#about_us">About</a></li>
             <li><a href="index.html#contact">Contact</a></li>
         </ul>
-        <i class="fa-solid fa-cart-shopping" id="cart-icon">
-            <span id="cart-count" class="cart-count">0</span>
-        </i>
+        <div class="nav-right">
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <i class="fa-solid fa-cart-shopping" id="cart-icon">
+                <span id="cart-count" class="cart-count">0</span>
+            </i>
+        </div>
     </nav>
 
     <h1> Featured Pieces</h1>
@@ -1311,7 +1403,21 @@
         </div>
     </div>
 
-    <script>
+    <script>    
+
+        //nav
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navUl = document.querySelector('#nav_ul');
+            
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navUl.classList.toggle('active');
+            });
+        });
+        //cart functionality
+
+
         let cart = JSON.parse(localStorage.getItem('diamondCart')) || [];
 
         const cartIcon = document.getElementById('cart-icon');
